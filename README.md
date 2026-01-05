@@ -27,6 +27,10 @@ This application allows testers to easily switch between different sBitx reposit
 ### Option 1: Standalone Executable (Recommended for Testers)
 
 1. Download the `sBitx-Branch-Manager` executable
+   ```bash
+   cd ~/
+   wget https://github.com/jwellman80/sbitx-branch-manager/raw/refs/heads/main/dist/sBitx-Branch-Manager
+   ```
 2. Make it executable:
    ```bash
    chmod +x sBitx-Branch-Manager
