@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=sBitx Branch Manager
+Comment=Switch between sBitx repositories and branches
+Exec=/home/pi/sbitx_branch_manager/dist/sBitx-Branch-Manager
+Icon=applications-development
+Terminal=true
+Type=Application
+Categories=Development;Utility;

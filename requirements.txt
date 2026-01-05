@@ -1,0 +1,16 @@
+# sBitx Branch Manager - Python Dependencies
+
+# No external dependencies required for running the app
+# tkinter is built into Python 3.11
+
+# The following are already available in the standard library:
+# - tkinter (GUI framework)
+# - subprocess (for git and build commands)
+# - pathlib (for file path handling)
+# - dataclasses (for data models)
+# - json (for configuration)
+# - threading (for background operations)
+# - queue (for thread communication)
+
+# For building standalone executable:
+# pyinstaller>=6.0.0
