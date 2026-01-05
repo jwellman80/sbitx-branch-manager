@@ -1,0 +1,81 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Test imports
+      run: |
+        python -c "import models.repository; print('✓ models.repository')"
+        python -c "import core.config_manager; print('✓ core.config_manager')"
+        python -c "import core.git_manager; print('✓ core.git_manager')"
+        python -c "import core.build_manager; print('✓ core.build_manager')"
+
+    - name: Test repository model
+      run: |
+        python -c "
+        from models.repository import Repository
+
+        # Test URL validation
+        assert Repository.validate_and_normalize_url('drexjj/sbitx') == 'https://github.com/drexjj/sbitx.git'
+        assert Repository.validate_and_normalize_url('https://github.com/drexjj/sbitx') == 'https://github.com/drexjj/sbitx.git'
+        assert Repository.validate_and_normalize_url('invalid') is None
+
+        # Test repository creation
+        repo = Repository.create_new('drexjj/sbitx')
+        assert repo is not None
+        assert repo.display_name == 'drexjj/sbitx'
+        assert repo.get_short_name() == 'drexjj/sbitx'
+
+        print('✓ All repository model tests passed')
+        "
+
+    - name: Test config manager
+      run: |
+        python -c "
+        from core.config_manager import ConfigManager
+        from models.repository import Repository
+        import tempfile
+        import os
+
+        # Use temp directory for testing
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config_dir = os.path.join(tmpdir, 'config')
+            cm = ConfigManager(config_dir)
+
+            # Test default config creation
+            config = cm.load_config()
+            assert 'repositories' in config
+            assert 'default_repositories' in config
+
+            # Test adding repository
+            repo = Repository.create_new('test/repo')
+            assert cm.add_repository(repo) == True
+            assert cm.add_repository(repo) == False  # Duplicate
+
+            # Test loading repositories
+            repos = cm.load_repositories()
+            assert len(repos) >= 1
+
+            print('✓ All config manager tests passed')
+        "
+
+    - name: Lint check (optional)
+      run: |
+        pip install flake8 || true
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true

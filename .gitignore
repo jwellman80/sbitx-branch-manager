@@ -8,6 +8,11 @@ venv/
 env/
 ENV/
 
+# PyInstaller
+build/
+dist/
+*.spec
+
 # Application
 config/repositories.json
 logs/

@@ -63,6 +63,14 @@ sudo cp sBitx-Branch-Manager /usr/local/bin/
 
 See [BUILD.md](BUILD.md) for instructions on building the standalone executable.
 
+### Automated Builds
+
+Every push to the main branch triggers automatic builds:
+- **x86_64 Linux** executable (for desktop/laptop testing)
+- **ARM64 Linux** executable (for Raspberry Pi)
+
+Download pre-built executables from the [Releases](../../releases) page or [Actions](../../actions) artifacts.
+
 ## Usage
 
 ### Running the Application

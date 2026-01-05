@@ -1,0 +1,64 @@
+name: Build ARM Executable (Raspberry Pi)
+
+# This workflow builds the executable for ARM/Raspberry Pi architecture
+# Note: This uses QEMU emulation which is slower but creates ARM-compatible binaries
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  release:
+    types: [ created ]
+
+jobs:
+  build-arm:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+      with:
+        platforms: arm64,arm
+
+    - name: Build for ARM using Docker
+      run: |
+        docker run --rm --platform linux/arm64 \
+          -v $PWD:/workspace \
+          -w /workspace \
+          python:3.11-slim-bullseye \
+          bash -c "
+            apt-get update &&
+            apt-get install -y binutils &&
+            pip install pyinstaller &&
+            pyinstaller \
+              --onefile \
+              --windowed \
+              --name 'sBitx-Branch-Manager' \
+              --add-data 'config:config' \
+              --hidden-import 'tkinter' \
+              --hidden-import 'queue' \
+              --hidden-import 'threading' \
+              main.py
+          "
+
+    - name: Upload ARM executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: sBitx-Branch-Manager-arm64
+        path: dist/sBitx-Branch-Manager
+        retention-days: 30
+
+    - name: Upload to Release (if release event)
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: dist/sBitx-Branch-Manager
+        asset_name: sBitx-Branch-Manager-arm64-linux
+        asset_content_type: application/octet-stream
