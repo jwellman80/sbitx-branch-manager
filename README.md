@@ -2,6 +2,8 @@
 
 A GUI tool for managing different sBitx repository branches and building them on Raspberry Pi.
 
+![sBitx Branch manager](assets/sbitx_branch_manager.png)
+
 ## Overview
 
 This application allows testers to easily switch between different sBitx repositories (e.g., `drexjj/sbitx`, `jwellman80/sbitx`) and branches, then automatically checkout and build the selected version.
