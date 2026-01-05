@@ -29,11 +29,11 @@ jobs:
         docker run --rm --platform linux/arm64 \
           -v $PWD:/workspace \
           -w /workspace \
-          python:3.11-slim-bullseye \
+          python:3.11-bullseye \
           bash -c "
-            apt-get update &&
-            apt-get install -y binutils &&
-            pip install pyinstaller &&
+            apt-get update && \
+            apt-get install -y binutils python3-tk tk-dev && \
+            pip install pyinstaller && \
             pyinstaller \
               --onefile \
               --windowed \
