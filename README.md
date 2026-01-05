@@ -80,12 +80,12 @@ Download pre-built executables from the [Releases](../../releases) page or [Acti
 ### Running the Application
 
 ```bash
-python3 main.py
+./sBitx-Branch-Manager
 ```
 
-Or if you made it executable:
+Or if you are building it from source:
 ```bash
-./main.py
+python3 main.py
 ```
 
 ### Using the GUI
